@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<graph>
+<balls name="first"/>
+<balls name="second"/>
+<balls name="third"/>
+<bats source="first" target="second"/>
+<bats source="third" target="first"/>
+<bats source="third" target="second"/>
+<strings name="left"/>
+<strings name="right"/>
+<knots source="left" target="right"/>
+</graph>

@@ -1,0 +1,18 @@
+# Graph "DefaultGraph" saved by grShell
+
+# begin of graph "DefaultGraph" saved by GrsExport
+
+new graph "example" "DefaultGraph"
+new :balls($ = "third")
+new :balls($ = "second")
+new :balls($ = "first")
+new :strings($ = "right")
+new :strings($ = "left")
+# total number of nodes: 5
+
+new @("left") - :knots($ = "knot1") -> @("right")
+# total number of edges: 1
+
+# end of graph "DefaultGraph" saved by GrsExport
+
+# end of graph "DefaultGraph" saved by grShell
