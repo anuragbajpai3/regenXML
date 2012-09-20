@@ -1,15 +1,32 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+
 
 
 public class regenerateXML {
@@ -19,7 +36,7 @@ public class regenerateXML {
 	   try{
 		   
 		   /*Getting Node Information*/
-		   FinalNodeInfo = getNodeInfo("//Users//Anurag//Documents//workspace//regenerateXML//result.grs");
+		   FinalNodeInfo = getNodeInfo("C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\result_save.grs");
 		   int k=0;
 		    while(k<(FinalNodeInfo.size())){
 			   System.out.println(FinalNodeInfo.get(k));
@@ -28,10 +45,16 @@ public class regenerateXML {
 			   System.out.println(FinalNodeInfo.get(k+3));
 			   k=k+4;
 			  }/*End of while*/
-		   /*Copying of XML File*/
-		    String srFile = "//Users//Anurag//Documents//workspace//regenerateXML//example.xml";
-		    String dtFile = "//Users//Anurag//Documents//workspace//regenerateXML//example_regen.xml";
-		    copyfile(srFile,dtFile);
+		    String inFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex_copy.xml";
+		    String OutFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\out.txt";
+		    readnwriteXML(inFile,OutFile,FinalNodeInfo);
+		    /*String srFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex.xml";
+		    String dtFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex_copy.xml";
+		    rewriteXML(srFile,dtFile,FinalNodeInfo);*/
+		   
+		    /*Copying of XML File*/
+		    
+		    //copyfile(srFile,dtFile);*/
 	   }catch (Exception e){//Catch exception if any
 	   System.err.println("Error: " + e.getMessage());
 	   }
@@ -89,18 +112,21 @@ public class regenerateXML {
 				   String str_nodesep1 = str_piece(str_nodesep, ':', 1);
 				   //System.out.println (str_nodesep1);
 				   if (str_nodesep.equals(str_nodesep1)){
-					  // System.out.println("The given string is not a node line");
+					  //System.out.println("The given string is not a node line");
 				   }
 				   else{
-					  // System.out.println("The given string is a node/edge line");
+					 // System.out.println("The given string is a node/edge line");
 					   String str_nodesep2 = str_piece(str_nodesep1, '@', 1);
 					  if ((str_nodesep1.equals(str_nodesep2)))
 					   {	
 						  //System.out.println("The given string is a node line");
 						    String str_resultn1 = str_piece(strLine, ':', 2);
+						    //System.out.println(str_resultn1);
+						    //System.out.println(str_piece(str_resultn1, '(', 1));
+						   
 						    NodeClass.add(str_piece(str_resultn1, '(', 1));
 					        NodeName.add(str_piece(str_resultn1, '"', 2));
-					       
+					        //System.out.println(str_piece(str_resultn1, '"', 5));
 					   }
 					  else
 					  {
@@ -191,4 +217,122 @@ public class regenerateXML {
 		  System.out.println(e.getMessage());  
 		  }
 		  }
+
+	private static void readnwriteXML(String inFile,String OutFile,List <String> NodeInfo){
+		try {        
+			
+			BufferedReader in = new BufferedReader(new FileReader(inFile)); 
+		    PrintWriter out = new PrintWriter(new File(OutFile));   
+		    String line; //a line in the file        
+		    String params[]; //holds the name:number:color parameters of each line       
+		   
+		    while ((line = in.readLine()) != null) {                
+		    	 
+		    	//System.out.println(line);
+		    	params = line.split("<processor", 2); //split the line into the 3 parameters seperated by :                
+		    	if(params[0].equals(line)){
+		    		//System.out.println("Not a Processor Line");
+		    	}
+		    	else{
+		    		String ProcName = str_piece(line, '"', 2);
+		    		System.out.println(ProcName);
+		    		for (int i = 0;i<NodeInfo.size();i++){
+		    			
+		    		}
+		    	}
+		    	
+		    	
+		    	
+		    	if ("Paul".equals(params[0]) && "746".equals(params[1])) { //find the line we want to replace    
+				out.println(params[0] + ":" + params[1] + ":" + "Orange"); //output the new line      
+				} else {                        
+					out.println(line); //if it's not the line, just output it as-is   
+				}        }        in.close();       
+				out.flush();        
+				out.close();
+				} 
+		catch (Exception e) {   
+					e.printStackTrace();
+					} 
+			}
+		
+		
+	
+	
+	
+		private static void rewriteXML(String srFile, String dtFile,List <String> NodeInfo){
+		copyfile(srFile, dtFile);
+		FileWriter fstream ;
+		
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+				.newInstance();// obtain a Parser
+		//Defines the API to obtain DOM Document instances from an XML document
+		DocumentBuilder dBuilder = null;
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		//The Document interface represents the entire XML document
+		// provides the primary access to the document's data
+		org.w3c.dom.Document doc = null;
+		try {
+			doc = dBuilder.parse(dtFile);
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//direct access to the child node that is the document element of the document.
+		doc.getDocumentElement().normalize();
+		
+		System.out.println("Root Element: "
+				+ doc.getDocumentElement().getNodeName());
+		NodeList nList = doc.getElementsByTagName("*");
+		System.out.println("=============================");
+		
+		// Keep reading elements till you reach the end of subNode i.e - end of </operations> tag
+		for (int i = 0; i < nList.getLength(); i++) {
+			org.w3c.dom.Node nNode = nList.item(i);
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+				Element eElement = (Element) nNode;
+				// Pass the tagName to method so that it can be populated
+				
+				if(eElement.hasChildNodes()){
+					System.out.print("Tagname :'"+eElement.getNodeName()+"'\n Value:'"+eElement.getFirstChild().getNodeValue()+"'");
+					
+						if (eElement.hasAttributes()){
+						      NamedNodeMap attributes = (NamedNodeMap)eElement.getAttributes();
+				                for (int g = 0; g < attributes.getLength(); g++) {
+				                    Attr attribute = (Attr)attributes.item(g);
+				                    System.out.print(" Attribute: '" + attribute.getName() +
+				                    "' with value '" +attribute.getValue()+"'\n\n");
+				                }
+							System.out.println("_______________________________________________");
+						}
+					}
+				else{
+					System.out.println("Tagname :'"+eElement.getNodeName()+"'\n Value:'"+eElement.getNextSibling().getNodeValue()+"'");
+					
+					if (eElement.hasAttributes()){
+				      NamedNodeMap attributes = (NamedNodeMap)eElement.getAttributes();
+		                for (int g = 0; g < attributes.getLength(); g++) {
+		                    Attr attribute = (Attr)attributes.item(g);
+		                    System.out.print("   Attribute: '" + attribute.getName() +
+		                    "' with value '" +attribute.getValue()+"'\n\n");
+		                }
+		                System.out.println("_______________________________________________");
+				} }
+			}
+		}
+		
+	
 }
+		
+		
+		  }
+
