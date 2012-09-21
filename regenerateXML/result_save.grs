@@ -15,7 +15,7 @@ new :workflowInputPort($ = "input0")
 new :workflowInputPort($ = "input1")
 
 new @("node_19") - :connects($ = "connect") -> @("node_47")
-new @("node_71") - :connects($ = "connect") -> @("node_18")
+
 
 # total number of nodes: 10
 

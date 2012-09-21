@@ -42,7 +42,7 @@ public class regenerateXML {
 	   try{
 		   
 		   /*Getting Node Information*/
-		   FinalNodeInfo = getNodeInfo("//Users//Anurag//git//rewriteXML//regenerateXML//result_save.grs");
+		   FinalNodeInfo = getNodeInfo("C:\\Users\\abajpai\\git\\rewriteXML2\\regenerateXML\\result_save.grs");
 		   int k=0;
 		    while(k<(FinalNodeInfo.size())){
 		    	FinalSrcNodeName.add(FinalNodeInfo.get(k));
@@ -56,8 +56,8 @@ public class regenerateXML {
 			   k=k+4;
 			  }/*End of while*/
 		    
-		    String inFile = "//Users//Anurag//git//rewriteXML//regenerateXML//saveLivingstone-complex.xml";
-		    String OutFile = "//Users//Anurag//git//rewriteXML//regenerateXML//out.txt";
+		    String inFile = "C:\\Users\\abajpai\\git\\rewriteXML2\\regenerateXML\\saveLivingstone-complex.xml";
+		    String OutFile = "C:\\Users\\abajpai\\git\\rewriteXML2\\regenerateXML\\out.xml";
 		    readnwriteXML(inFile,OutFile,FinalSrcNodeName,FinalDestNodeName,FinalSrcNodeClass,FinalDestNodeClass);
 		    /*String srFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex.xml";
 		    String dtFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex_copy.xml";
@@ -238,45 +238,57 @@ public class regenerateXML {
 		    String params[]; //holds the name:number:color parameters of each line       
 		    String params1[];
 		    String MatchedProcName = "initial";
-		    int Flag = 0;
+		    String ProcName = "initial";
 		    while ((line = in.readLine()) != null) {                
-		    	 
+		    	//String MatchedProcName = "initial"; 
 		    	//System.out.println(line);
 		    	params = line.split("<processor", 2); //split the line into the 3 parameters separated by :                
 		    	if(params[0].equals(line)){
 		    		//System.out.println("Not a Processor Line");
-		    		out.println(line);
-		    		Flag = 1;
+		    		
 		    	}
 		    	else{
-		    		String ProcName = str_piece(line, '"', 2);
-		    		Flag = 1;
+		    		ProcName = str_piece(line, '"', 2);
 		    		//System.out.println(ProcName);
 		    		// Destination Node Comparison
 		    		for (int i = 0;i<DestNodeName.size();i++){
 		    			if(ProcName.equals(DestNodeName.get(i))){
 		    				MatchedProcName = ProcName;
+		    				//System.out.println(MatchedProcName);
 		    				//System.out.println("Match Found");
 		    				}
-		    			else{
-		    				out.println(line);
-		    			}
-		    		    		
-		    		    	
-		    			}
+		    			
+		    		   }
 		    			
 		    		}
+		    	
+		    	
 		    	params1 = line.split("<source processor", 2); //split the line into the 3 parameters separated by :                
 		    	if(params1[0].equals(line)){
 		    		//System.out.println("Not a Processor Line");
 		    		
 		    	}
 		    	else{
+		    		//System.out.println(" A Processor Line");
 		    		for (int i = 0;i<DestNodeName.size();i++){
 		    			if(MatchedProcName.equals(DestNodeName.get(i))){
-		    				out.println("<source processor = \"" + SrcNodeName.get(i) + "\"\\>");
-				    		System.out.println(MatchedProcName);
+		    				//System.out.println(i);
+		    				line = "<source processor = \"" + SrcNodeName.get(i) + "\"\\>";
+		    				//out.println("<source processor = \"" + SrcNodeName.get(i) + "\"\\>");
+		    				//System.out.println(MatchedProcName);
+		    				MatchedProcName = "initial";
+		    				
 		    		}
+		    			else {
+		    				//System.out.println(i);
+		    				line = "                      ";
+		    				
+		    				//out.println("<source processor = \"" + SrcNodeName.get(i) + "\"\\>");
+		    				//System.out.println(MatchedProcName);
+		    				//MatchedProcName = "initial";
+		    				
+		    		}
+		    		}	
 		    			
 				    		
 				    		// 
@@ -285,11 +297,11 @@ public class regenerateXML {
 		    		    		
 		    		    	
 		    			}
-		    	}
-		    		
-		    		
-		    		
 		    	
+		    		
+		    	out.println(line);	
+		    		
+		
 		    	}
 		    	
 		    	
