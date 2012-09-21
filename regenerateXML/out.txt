@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<rdfgears>
+<rdfgears>
+   <metadata>
+   <metadata>
+      <id>saveLivingstone-complex</id>
+      <id>saveLivingstone-complex</id>
+      <description/>
+      <description/>
+      <password/>
+      <password/>
+   </metadata>
+   </metadata>
+   <workflow>
+   <workflow>
+      <workflowInputList x="16" y="13">
+      <workflowInputList x="16" y="13">
+         <workflowInputPort name="input1"/>
+         <workflowInputPort name="input1"/>
+         <workflowInputPort name="input0"/>
+         <workflowInputPort name="input0"/>
+      </workflowInputList>
+      </workflowInputList>
+      <network output="node_21" x="562" y="469">
+      <network output="node_21" x="562" y="469">
+         <processor id="node_21" x="699" y="282">
+            <function type="sparql">
+            <function type="sparql">
+               <config param="bindVariables">g;</config>
+               <config param="bindVariables">g;</config>
+               <config param="query">
+               <config param="query">
+PREFIX drugbank: &lt;http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/&gt;
+PREFIX drugbank: &lt;http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/&gt;
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+SELECT ?drug ?label ?description
+SELECT ?drug ?label ?description
+WHERE {
+WHERE {
+   GRAPH ?g {
+   GRAPH ?g {
+      ?drug rdfs:label ?label.
+      ?drug rdfs:label ?label.
+      OPTIONAL { ?drug drugbank:pharmacology ?description. } 
+      OPTIONAL { ?drug drugbank:pharmacology ?description. } 
+   }
+   }
+}</config>
+}</config>
+            </function>
+            </function>
+            <inputPort iterate="true" name="g">
+            <inputPort iterate="true" name="g">
+               <source processor="node_19"/>
+               <source processor="node_19"/>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_19" x="510" y="300">
+            <function type="custom-java">
+            <function type="custom-java">
+               <config param="implementation">nl.tudelft.rdfgears.rgl.function.standard.FetchRDF</config>
+               <config param="implementation">nl.tudelft.rdfgears.rgl.function.standard.FetchRDF</config>
+            </function>
+            </function>
+            <inputPort iterate="true" name="uri">
+            <inputPort iterate="true" name="uri">
+               <source processor="node_18"/>
+               <source processor="node_18"/>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_18" x="363" y="341">
+            <function type="record-project">
+            <function type="record-project">
+               <config param="projectField">drug</config>
+               <config param="projectField">drug</config>
+            </function>
+            </function>
+            <inputPort iterate="true" name="record">
+            <inputPort iterate="true" name="record">
+               <source processor="node_24"/>
+               <source processor="node_24"/>
+<source processor = "node_71"\>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_24" x="145" y="331">
+            <function type="sparql">
+            <function type="sparql">
+               <config param="bindVariables">g;</config>
+               <config param="bindVariables">g;</config>
+               <config param="query">PREFIX ds: &lt;http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/&gt;
+               <config param="query">PREFIX ds: &lt;http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/&gt;
+SELECT ?drug 
+SELECT ?drug 
+WHERE {
+WHERE {
+   GRAPH ?g {
+   GRAPH ?g {
+      ?disease ds:possibleDrug ?drug.
+      ?disease ds:possibleDrug ?drug.
+   }
+   }
+}</config>
+}</config>
+            </function>
+            </function>
+            <inputPort iterate="false" name="g">
+            <inputPort iterate="false" name="g">
+               <source processor="node_71"/>
+               <source processor="node_71"/>
+<source processor = "node_71"\>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_71" x="620" y="43">
+            <function type="bag-flatten"/>
+            <function type="bag-flatten"/>
+            <inputPort iterate="false" name="bag">
+            <inputPort iterate="false" name="bag">
+               <source processor="node_5"/>
+               <source processor="node_5"/>
+<source processor = "node_71"\>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_5" x="399" y="56">
+            <function type="filter">
+            <function type="filter">
+               <config param="implementation">nl.tudelft.rdfgears.rgl.function.standard.NotNull</config>
+               <config param="implementation">nl.tudelft.rdfgears.rgl.function.standard.NotNull</config>
+            </function>
+            </function>
+            <inputPort iterate="false" name="bag">
+            <inputPort iterate="false" name="bag">
+               <source processor="node_47"/>
+               <source processor="node_47"/>
+<source processor = "node_71"\>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_47" x="218" y="93">
+            <function type="custom-java">
+            <function type="custom-java">
+               <config param="implementation">workflow:closeSameAs</config>
+               <config param="implementation">workflow:closeSameAs</config>
+            </function>
+            </function>
+            <inputPort iterate="true" name="sameAsPair">
+            <inputPort iterate="true" name="sameAsPair">
+               <source processor="node_6"/>
+               <source processor="node_6"/>
+<source processor = "node_19"\>
+            </inputPort>
+            </inputPort>
+         </processor>
+         </processor>
+         <processor id="node_6" x="25" y="124">
+            <function type="sparql-endpoint">
+            <function type="sparql-endpoint">
+               <config param="endpoint">http://dbpedia.org/sparql</config>
+               <config param="endpoint">http://dbpedia.org/sparql</config>
+               <config param="query">PREFIX dbprop: &lt;http://dbpedia.org/property/&gt; 
+               <config param="query">PREFIX dbprop: &lt;http://dbpedia.org/property/&gt; 
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; 
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; 
+PREFIX dbpedia: &lt;http://dbpedia.org/ontology/&gt; 
+PREFIX dbpedia: &lt;http://dbpedia.org/ontology/&gt; 
+PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt; 
+PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt; 
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt; 
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt; 
+SELECT DISTINCT ?disease ?sameDisease 
+SELECT DISTINCT ?disease ?sameDisease 
+WHERE { 
+WHERE { 
+#        ?person a dbpedia:Person. 
+#        ?person a dbpedia:Person. 
+#        ?person foaf:name ?personName. 
+#        ?person foaf:name ?personName. 
+#        FILTER(str(?personName)="David Livingstone"). 
+#        FILTER(str(?personName)="David Livingstone"). 
+#        ?person dbpedia:deathCause ?disease. 
+#        ?person dbpedia:deathCause ?disease. 
+#        ?disease rdfs:label ?label.
+#        ?disease rdfs:label ?label.
+          ?disease owl:sameAs ?sameDisease.
+          ?disease owl:sameAs ?sameDisease.
+          FILTER(?disease = &lt;http://dbpedia.org/resource/Malaria&gt;)  
+          FILTER(?disease = &lt;http://dbpedia.org/resource/Malaria&gt;)  
+}</config>
+}</config>
+            </function>
+            </function>
+         </processor>
+         </processor>
+      </network>
+      </network>
+   </workflow>
+   </workflow>
+</rdfgears>
+</rdfgears>

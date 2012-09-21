@@ -1,0 +1,26 @@
+# Graph "DefaultGraph" saved by grShell
+
+# begin of graph "DefaultGraph" saved by GrsExport
+
+new graph "saveLivingStone" "DefaultGraph"
+new :processor($ = "node_6", x = "25", y = "124", isOutput = False, iterate = False)
+new :processor($ = "node_47", x = "218", y = "93", isOutput = False, iterate = False)
+new :processor($ = "node_5", x = "399", y = "56", isOutput = False, iterate = False)
+new :processor($ = "node_71", x = "620", y = "43", isOutput = False, iterate = False)
+new :processor($ = "node_24", x = "145", y = "331", isOutput = False, iterate = False)
+new :processor($ = "node_18", x = "363", y = "341", isOutput = False, iterate = False)
+new :processor($ = "node_19", x = "510", y = "300", isOutput = False, iterate = False)
+new :processor($ = "node_21", x = "699", y = "282", isOutput = True, iterate = False)
+new :workflowInputPort($ = "input0")
+new :workflowInputPort($ = "input1")
+
+new @("node_19") - :connects($ = "connect") -> @("node_47")
+new @("node_71") - :connects($ = "connect") -> @("node_18")
+
+# total number of nodes: 10
+
+# total number of edges: 0
+
+# end of graph "DefaultGraph" saved by GrsExport
+
+# end of graph "DefaultGraph" saved by grShell

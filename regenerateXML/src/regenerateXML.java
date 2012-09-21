@@ -32,22 +32,33 @@ import org.xml.sax.SAXException;
 public class regenerateXML {
 	  public static void main(String args[])
 	   {
-		  List <String> FinalNodeInfo = new ArrayList <String> ();
+		  List <String> FinalNodeInfo       = new ArrayList <String> ();
+		  List <String> FinalSrcNodeName    = new ArrayList <String> ();
+		  List <String> FinalDestNodeName   = new ArrayList <String> ();
+		  List <String> FinalSrcNodeClass   = new ArrayList <String> ();
+		  List <String> FinalDestNodeClass  = new ArrayList <String> ();
+		  
+		  
 	   try{
 		   
 		   /*Getting Node Information*/
-		   FinalNodeInfo = getNodeInfo("C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\result_save.grs");
+		   FinalNodeInfo = getNodeInfo("//Users//Anurag//git//rewriteXML//regenerateXML//result_save.grs");
 		   int k=0;
 		    while(k<(FinalNodeInfo.size())){
-			   System.out.println(FinalNodeInfo.get(k));
+		    	FinalSrcNodeName.add(FinalNodeInfo.get(k));
+		    	FinalDestNodeName.add(FinalNodeInfo.get(k+1));
+		    	FinalSrcNodeClass.add(FinalNodeInfo.get(k+2));
+		    	FinalDestNodeClass.add(FinalNodeInfo.get(k+3));
+			   /*System.out.println(FinalNodeInfo.get(k));
 			   System.out.println(FinalNodeInfo.get(k+1));
 			   System.out.println(FinalNodeInfo.get(k+2));
-			   System.out.println(FinalNodeInfo.get(k+3));
+			   System.out.println(FinalNodeInfo.get(k+3));*/
 			   k=k+4;
 			  }/*End of while*/
-		    String inFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex_copy.xml";
-		    String OutFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\out.txt";
-		    readnwriteXML(inFile,OutFile,FinalNodeInfo);
+		    
+		    String inFile = "//Users//Anurag//git//rewriteXML//regenerateXML//saveLivingstone-complex.xml";
+		    String OutFile = "//Users//Anurag//git//rewriteXML//regenerateXML//out.txt";
+		    readnwriteXML(inFile,OutFile,FinalSrcNodeName,FinalDestNodeName,FinalSrcNodeClass,FinalDestNodeClass);
 		    /*String srFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex.xml";
 		    String dtFile = "C:\\Users\\abajpai\\git\\regenXML\\regenerateXML\\saveLivingstone-complex_copy.xml";
 		    rewriteXML(srFile,dtFile,FinalNodeInfo);*/
@@ -218,36 +229,76 @@ public class regenerateXML {
 		  }
 		  }
 
-	private static void readnwriteXML(String inFile,String OutFile,List <String> NodeInfo){
+	private static void readnwriteXML(String inFile,String OutFile,List <String> SrcNodeName,List <String> DestNodeName,List <String> SrcNodeClass,List <String> DestNodeClass){
 		try {        
 			
 			BufferedReader in = new BufferedReader(new FileReader(inFile)); 
 		    PrintWriter out = new PrintWriter(new File(OutFile));   
 		    String line; //a line in the file        
 		    String params[]; //holds the name:number:color parameters of each line       
-		   
+		    String params1[];
+		    String MatchedProcName = "initial";
+		    int Flag = 0;
 		    while ((line = in.readLine()) != null) {                
 		    	 
 		    	//System.out.println(line);
-		    	params = line.split("<processor", 2); //split the line into the 3 parameters seperated by :                
+		    	params = line.split("<processor", 2); //split the line into the 3 parameters separated by :                
 		    	if(params[0].equals(line)){
 		    		//System.out.println("Not a Processor Line");
+		    		out.println(line);
+		    		Flag = 1;
 		    	}
 		    	else{
 		    		String ProcName = str_piece(line, '"', 2);
-		    		System.out.println(ProcName);
-		    		for (int i = 0;i<NodeInfo.size();i++){
+		    		Flag = 1;
+		    		//System.out.println(ProcName);
+		    		// Destination Node Comparison
+		    		for (int i = 0;i<DestNodeName.size();i++){
+		    			if(ProcName.equals(DestNodeName.get(i))){
+		    				MatchedProcName = ProcName;
+		    				//System.out.println("Match Found");
+		    				}
+		    			else{
+		    				out.println(line);
+		    			}
+		    		    		
+		    		    	
+		    			}
 		    			
 		    		}
+		    	params1 = line.split("<source processor", 2); //split the line into the 3 parameters separated by :                
+		    	if(params1[0].equals(line)){
+		    		//System.out.println("Not a Processor Line");
+		    		
+		    	}
+		    	else{
+		    		for (int i = 0;i<DestNodeName.size();i++){
+		    			if(MatchedProcName.equals(DestNodeName.get(i))){
+		    				out.println("<source processor = \"" + SrcNodeName.get(i) + "\"\\>");
+				    		System.out.println(MatchedProcName);
+		    		}
+		    			
+				    		
+				    		// 
+		    				//System.out.println("Match Found");
+		    				//}
+		    		    		
+		    		    	
+		    			}
+		    	}
+		    		
+		    		
+		    		
+		    	
 		    	}
 		    	
 		    	
 		    	
-		    	if ("Paul".equals(params[0]) && "746".equals(params[1])) { //find the line we want to replace    
+		    	/*if ("Paul".equals(params[0]) && "746".equals(params[1])) { //find the line we want to replace    
 				out.println(params[0] + ":" + params[1] + ":" + "Orange"); //output the new line      
 				} else {                        
 					out.println(line); //if it's not the line, just output it as-is   
-				}        }        in.close();       
+				}        }*/        in.close();       
 				out.flush();        
 				out.close();
 				} 
